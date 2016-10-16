@@ -1,4 +1,4 @@
-package nqc.henry.howtospeak;
+package nqc.henry.howtospeak.acitvity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import nqc.henry.howtospeak.R;
 import nqc.henry.howtospeak.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setIconifiedByDefault(false);
         return true;
     }
     @Override

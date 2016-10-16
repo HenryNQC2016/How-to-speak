@@ -18,7 +18,7 @@ import nqc.henry.howtospeak.adapter.ViewPagerAdapter;
 public class MainFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private HomeFragment homeFragment;
+    private VideosFragment videosFragment;
     private TopicsFragment topicsFragment;
 
     @Nullable
@@ -36,10 +36,10 @@ public class MainFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        homeFragment = new HomeFragment();
+        videosFragment = new VideosFragment();
         topicsFragment = new TopicsFragment();
 
-        adapter.addFragment(homeFragment, getString(R.string.VIDEOS));
+        adapter.addFragment(videosFragment, getString(R.string.VIDEOS));
         adapter.addFragment(topicsFragment, getString(R.string.TOPICS));
         viewPager.setAdapter(adapter);
     }
