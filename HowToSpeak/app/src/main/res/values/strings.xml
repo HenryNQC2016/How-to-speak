@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">How to Speak</string>
+    <string name="HOME">HOME</string>
+    <string name="home">Home</string>
+    <string name="TOPICS">TOPICS</string>
+    <string name="VIDEOS">VIDEOS</string>
+    <string name="rating">Rating for us</string>
+    <string name="share">Share</string>
+    <string name="about">About us</string>
+    <string name="speaking">Speaking</string>
+    <string name="listening">Listening</string>
+    <string name="pronunciation">Pronunciation</string>
+    <string name="blog">Blog</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="search_hint">Search...</string>
+    <string name="search">Search</string>
+</resources>
