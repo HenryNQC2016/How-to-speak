@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
@@ -18,7 +19,7 @@ import nqc.henry.howtospeak.model.DeveloperKey;
 public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         View.OnClickListener,
         CompoundButton.OnCheckedChangeListener,
-        YouTubePlayer.OnFullscreenListener{
+        YouTubePlayer.OnFullscreenListener {
 
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -28,14 +29,20 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
     private YouTubePlayer player;
     private String videoId;
     private boolean fullscreen;
+    private String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
-        Intent intent=getIntent();
-        Bundle extra=intent.getExtras();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
         //videoId=extra.getString("videoId");
+
+        if (bundle.getString("query") != null) {
+            query = bundle.getString("query");
+            Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
+        }
 
         // The videoBox is INVISIBLE if no video was previously selected, so we need to show it now.
 
@@ -55,14 +62,12 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
             playerParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
 
-        }
-        else {
+        } else {
             playerParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
         }
 
     }
-
 
 
     @Override
@@ -81,6 +86,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         super.onConfigurationChanged(newConfig);
         doLayout();
     }
+
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean b) {
         this.player = player;
@@ -88,7 +94,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
         if (!b) {
-            player.loadVideo("x0DqhUz-Qr8",5000);
+            player.loadVideo("x0DqhUz-Qr8", 5000);
         }
     }
 

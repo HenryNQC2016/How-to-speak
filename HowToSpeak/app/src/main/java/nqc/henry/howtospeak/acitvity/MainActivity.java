@@ -1,6 +1,7 @@
 package nqc.henry.howtospeak.acitvity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,7 +23,7 @@ import android.widget.FrameLayout;
 import nqc.henry.howtospeak.R;
 import nqc.henry.howtospeak.fragment.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String PREFERENCES_FILE = "mymaterialapp_settings";
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_action_bar, menu);
@@ -97,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
         searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -148,5 +152,21 @@ public class MainActivity extends AppCompatActivity {
             saveSharedSetting(this, PREF_USER_LEARNED_DRAWER, "true");
         }
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (!query.equals("")) {
+            Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+            intent.putExtra("query", query);
+            startActivity(intent);
+            overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
