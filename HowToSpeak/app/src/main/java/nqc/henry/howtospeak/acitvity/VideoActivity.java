@@ -35,7 +35,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         setContentView(R.layout.activity_video);
         Intent intent=getIntent();
         Bundle extra=intent.getExtras();
-        videoId=extra.getString("videoId");
+        //videoId=extra.getString("videoId");
 
         // The videoBox is INVISIBLE if no video was previously selected, so we need to show it now.
 
@@ -88,7 +88,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
         if (!b) {
-            player.loadVideo(videoId,5000);
+            player.loadVideo("x0DqhUz-Qr8",5000);
         }
     }
 
