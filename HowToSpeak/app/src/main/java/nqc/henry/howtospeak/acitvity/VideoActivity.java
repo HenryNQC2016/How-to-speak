@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -12,9 +13,17 @@ import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 import nqc.henry.howtospeak.R;
 import nqc.henry.howtospeak.model.DeveloperKey;
+import nqc.henry.howtospeak.model.SearchResponse;
+import nqc.henry.howtospeak.model.Video;
 
 public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         View.OnClickListener,
@@ -30,6 +39,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
     private String videoId;
     private boolean fullscreen;
     private String query;
+    private ArrayList<Video> videos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,9 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         playerView.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
         doLayout();
+        videos = new ArrayList<Video>();
+        String JsonStr = "{\"videoList\":[{\"videoId\":\"1X2LwclN878\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"2R3GQMyjloo\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"2ZCVdpjJNro\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"5QhIK43IVA8\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"5taPKUVhlGI\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"}]}";
+        loadJson(JsonStr);
 
     }
 
@@ -93,9 +106,18 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         // Specify that we want to handle fullscreen behavior ourselves.
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
+        Random rand = new Random();
+        int value = rand.nextInt(videos.size())-1;
         if (!b) {
-            player.loadVideo("x0DqhUz-Qr8", 5000);
+            player.loadVideo(videos.get(value).getVideoId(), 1000*60);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("trang thai","destroy");
+        //this.player=null;
     }
 
     @Override
@@ -120,6 +142,36 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
     @Override
     public void onClick(View view) {
         player.setFullscreen(!fullscreen);
+    }
+
+    private void loadJson(String json) {
+
+        SearchResponse searchResponse = new SearchResponse();
+        ArrayList<Video> videoList = new ArrayList<>();
+        try {
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = (JsonObject) jsonParser.parse(json);
+            //lay json array
+            JsonArray jsonArray = jsonObject.getAsJsonArray("videoList");
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject objectVideo = jsonArray.get(i).getAsJsonObject();
+                Video video = new Video();
+                video.setVideoId(objectVideo.get("videoId").getAsString());
+                video.setVideoName(objectVideo.get("videoName").getAsString());
+                video.setTime(objectVideo.get("time").getAsString());
+                video.setChanelName(objectVideo.get("chanelName").getAsString());
+                video.setView_count(objectVideo.get("viewCount").getAsLong());
+                videoList.add(video);
+            }
+            searchResponse.setVideoList(videoList);
+            videos = searchResponse.getVideoList();
+
+        } catch (Exception e) {
+            Log.e("Error:", "Loi lay videoList");
+
+        }
+
     }
 
 

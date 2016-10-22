@@ -84,6 +84,7 @@ public class VideosFragment extends Fragment {
                 videoList.add(video);
             }
             searchResponse.setVideoList(videoList);
+            videos.removeAll(videos);
             videos = searchResponse.getVideoList();
 
         } catch (Exception e) {
