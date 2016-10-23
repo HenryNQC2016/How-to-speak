@@ -33,7 +33,8 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
-
+    private final int maxResults = 1500;
+    private final int maxPresentResult = 50;
     private YouTubePlayerView playerView;
     private YouTubePlayer player;
     private String videoId;
@@ -49,9 +50,9 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         Bundle bundle = intent.getExtras();
         //videoId=extra.getString("videoId");
 
+
         if (bundle.getString("query") != null) {
             query = bundle.getString("query");
-            Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
         }
 
         // The videoBox is INVISIBLE if no video was previously selected, so we need to show it now.
@@ -63,6 +64,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         videos = new ArrayList<Video>();
         String JsonStr = "{\"videoList\":[{\"videoId\":\"1X2LwclN878\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"2R3GQMyjloo\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"2ZCVdpjJNro\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"5QhIK43IVA8\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"},{\"videoId\":\"5taPKUVhlGI\", \"videoName\":\"[Trên tay] Card đồ họa Asus XXXX\",\"chanelName\":\"Tinh Tế\",\"time\":\"5:10\",\"viewCount\":\"100\"}]}";
         loadJson(JsonStr);
+        randomResult();
 
     }
 
@@ -107,16 +109,15 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
         Random rand = new Random();
-        int value = rand.nextInt(videos.size())-1;
+        int value = rand.nextInt(videos.size()) - 1;
         if (!b) {
-            player.loadVideo(videos.get(value).getVideoId(), 1000*60);
+            player.loadVideo(videos.get(value).getVideoId(), 1000 * 60);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("trang thai","destroy");
         //this.player=null;
     }
 
@@ -174,5 +175,20 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
 
     }
 
+    private void randomResult() {
+        Random rand = new Random();
+        int value = rand.nextInt(videos.size()) - 1;
+        int presentResult = rand.nextInt(maxPresentResult);
+        int maxResults = this.maxResults + presentResult * rand.nextInt(10);
+        String text = getString(R.string.how_to_pronounce) + " " + query
+                + " " +
+                "(" + String.valueOf(presentResult) + " " + getString(R.string.out_of) + " " + String.valueOf(maxResults) + ")";
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

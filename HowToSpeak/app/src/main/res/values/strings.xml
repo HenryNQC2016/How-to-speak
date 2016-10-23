@@ -12,6 +12,8 @@
     <string name="pronunciation">Pronunciation</string>
     <string name="blog">Blog</string>
     <string name="dictionary">Dictionary</string>
+    <string name="how_to_pronounce">How to pronounce:</string>
+    <string name="out_of">out of</string>
     <string name="search_hint">Search...</string>
     <string name="search">Search</string>
     <string name="error_player">There was an error initializing the YouTubePlayer</string>
