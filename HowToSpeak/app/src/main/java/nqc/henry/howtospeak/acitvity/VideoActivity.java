@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.gson.JsonArray;
@@ -109,7 +110,7 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         player.setOnFullscreenListener(this);
         Random rand = new Random();
-        int value = rand.nextInt(videos.size()) - 1;
+        int value = rand.nextInt(videos.size());
         if (!b) {
             player.loadVideo(videos.get(value).getVideoId(), 1000 * 60);
         }
@@ -117,9 +118,33 @@ public class VideoActivity extends YouTubeFailureRecoveryActivity implements
 
     @Override
     protected void onDestroy() {
+        if (player != null) {
+            player.release();
+        }
         super.onDestroy();
         //this.player=null;
     }
+    public void setVideoId(String videoId) {
+        if (videoId != null && !videoId.equals(this.videoId)) {
+            this.videoId = videoId;
+            if (player != null) {
+                //player.cueVideo(videoId);
+                player.loadVideo(videoId,5000);
+            }
+        }
+    }
+
+    public void pause() {
+        if (player != null) {
+            player.pause();
+        }
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult result) {
+        this.player = null;
+    }
+
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
